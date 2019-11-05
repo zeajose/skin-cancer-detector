@@ -19,7 +19,7 @@ from PIL import Image as PILImage
 # Define a flask app
 app = Flask(__name__)
 
-NAME_OF_FILE = 'model_best' # Name of your exported file
+NAME_OF_FILE = ' model_best ' # Name of your exported file
 PATH_TO_MODELS_DIR = Path('') # by default just use /models in root dir
 classes = ['Actinic keratoses', 'Basal cell carcinoma', 'Benign keratosis',
            'Dermatofibroma', 'Melanocytic nevi', 'Melanoma', 'Vascular lesions']
@@ -39,7 +39,7 @@ def encode(img):
     buff = BytesIO()
     pil_img.save(buff, format="JPEG")
     return base64.b64encode(buff.getvalue()).decode("utf-8")
-	
+
 def model_predict(img):
     img = open_image(BytesIO(img))
     pred_class,pred_idx,outputs = learn.predict(img)
@@ -49,11 +49,11 @@ def model_predict(img):
             key=lambda p: p[1],
             reverse=True
         )
-	
+
     img_data = encode(img)
     result = {"class":pred_class, "probs":pred_probs, "image":img_data}
     return render_template('result.html', result=result)
-   
+
 
 @app.route('/', methods=['GET', "POST"])
 def index():
@@ -71,7 +71,7 @@ def upload():
             preds = model_predict(img)
             return preds
     return 'OK'
-	
+
 @app.route("/classify-url", methods=["POST", "GET"])
 def classify_url():
     if request.method == 'POST':
@@ -81,7 +81,7 @@ def classify_url():
             preds = model_predict(response.content)
             return preds
     return 'OK'
-    
+
 
 if __name__ == '__main__':
     port = os.environ.get('PORT', 8008)
